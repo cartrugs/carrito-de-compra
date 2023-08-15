@@ -9,10 +9,15 @@ document.addEventListener('DOMContentLoaded', () => {
    * Obtener las categorías.
    */
   /**
-   * Filtro de selección por categoría.
+   * Captura `select` para el filtro de selección por categoría.
    * @type {HTMLSelectElement}
    */
   const opcionesCategoria = document.querySelector('#opcionesCategoria');
+
+  /**
+   * Captura para el contenedor donde se mostrarán los productos.
+   */
+  const contenedorProductos = document.querySelector('#contenedorProductos');
 
   /**
    * La URL base para la API de productos.
@@ -23,16 +28,20 @@ document.addEventListener('DOMContentLoaded', () => {
   // ===== EVENTOS =====
 
   /**
-   * Maneja el evento de cambio en el select de categorías.
+   * Maneja el evento de cambio en el select de categorías. Cuando el evento `change` se dispara en el elemento `select` de categorías `opcionesCategoria`, se ejecuta la función de escucha.
    */
   opcionesCategoria.addEventListener('change', async () => {
-    // Obtener la categoría seleccionada
+    // Obtener el valor seleccionado del elemento `<select>` de categorías y lo almacena en la variable.
     let categoriaSeleccionada = opcionesCategoria.value;
-    console.log(categoriaSeleccionada);
-
-    if (categoriaSeleccionada) {
-        // Obtener y mostrar productos de la categoría seleccionada
-        const productos = await categoriaSelect(`?categories=${categoriaSeleccionada}`);
+ 
+    // Se verifica si la categoría seleccionada es diferente de `'seleccionaCategoria'`. Esto se hace para asegurarse de que no se realizan acciones si el usuario selcciona la opción por defecto en el `<select>`
+    if (categoriaSeleccionada !== 'seleccionaCategoria') {
+      // const productos = await categoriaSelect(`?categories=${categoriaSeleccionada}`);
+      
+      /**
+       *  Obtener y mostrar productos de la categoría seleccionada si la categoría seleccionada no es la opción por defecto y se invoca la función pasando el valor de `categoriaSeleccionada` como parte de la url para obtener productos de la categoría correspondiente.
+       */ 
+      await pintarCategorias(`?categories=${categoriaSeleccionada}`)
 
     }
   })
@@ -45,12 +54,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const cargarCategorias = async () => {
     try {
         /**
-         * Obtener las categorías. Retorna promesa. Se utiliza <await> para que continúe ejecutándose el programa. Se utiliza <fetch> para obtener obtener recursos de forma asíncrona desde la API.
+         * Obtener las categorías. Retorna promesa. Se utiliza `await` para que continúe ejecutándose el programa. Se utiliza `fetch` para obtener obtener recursos de forma asíncrona desde la API.
          */
         const res = await fetch(`${urlBase}/categories`);
 
         /**
-         * Se verifica si la respuesta <res> es ok. Si lo es , se convierten los datos a JSON usando <await res.json()>
+         * Se verifica si la respuesta `res` es ok. Si lo es , se convierten los datos a JSON usando `await res.json()`
          */
         if (res.ok) {
             const categorias = await res.json();
@@ -66,7 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
             throw 'No se pudieron cargar las categorías'
         }
         /**
-         * En el bloque <catch> se captura cualquier error que ocurra en el proceso y se imprime utilizando <console.log(error)>.
+         * En el bloque `catch` se captura cualquier error que ocurra en el proceso y se imprime utilizando `console.log(error)`.
          */
     } catch (error) {
         console.log(error)
@@ -82,7 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const categoriaSelect = async (url) => {
     try {
       /**
-       * Retorna promesa. Se utiliza <await> para que continúe ejecutándose el programa. Se utiliza <fetch> para obtener recursos de forma asíncrona desde la API
+       * Retorna promesa. Se utiliza `await` para que continúe ejecutándose el programa. Se utiliza `fetch` para obtener recursos de forma asíncrona desde la API
        */
       const res = await fetch(`${urlBase}/${url}`);
 
@@ -98,10 +107,52 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
+  const pintarCategorias = async (url) => {
+    try {
+      const res =  await fetch(`${urlBase}/${url}`);
+
+      if (res.ok) {
+        const data = await res.json();
+
+        // Limpiar el contenido contenedor
+        contenedorProductos.innerHTML = ''
+        data.products.forEach( (element) => {
+          const figure = document.createElement('FIGURE');
+          figure.classList.add('producto')
+          const imagen = document.createElement('IMG');
+          imagen.src = element.images[0];
+          imagen.alt = element.title;
+          const titulo = document.createElement('H2');
+          titulo.classList.add('textCenter')
+          titulo.textContent = `${element.title}`
+          const valoracion = document.createElement('P');
+          valoracion.classList.add('textCenter')
+          valoracion.textContent = `${element.rating}`;
+          const precio = document.createElement('H3');
+          precio.classList.add('textCenter')
+          precio.textContent = `${element.price}`;
+
+          figure.append(imagen);
+          figure.append(titulo);
+          figure.append(valoracion);
+          figure.append(precio);
+
+          contenedorProductos.append(figure);
+
+        })
+
+        // Crear elementos para cada producto y agregarlos al contenedor
+      } else {
+        throw 'No se puede mostrar el resultado de la catregoría seleccionada'
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   // ===== INVOCACIÓN DE FUNCIONES =====
 
   cargarCategorias();
-
 
 
 

@@ -1,6 +1,12 @@
+/* GENERALES */
 :root {
     --color-white: #fff;
     --color-black: #000;
+    --color1: #575757;
+    --bgLight: #fdfdfd;
+    --bRad: 30px; /* border-radius */
+    --bRad2: 10px; /* border-radius */
+    --letterSpacing: 0.2em;
 }
 
 * {
@@ -9,7 +15,123 @@
     box-sizing: border-box;
 }
 
-
 body {
     font-family: 'Nunito', sans-serif;
+}
+
+img {
+    width: 100%;
+    border-radius: 3px;
+}
+
+p {
+    margin-bottom: 10px;
+}
+
+h1 {
+    margin: 65px auto 40px;
+}
+
+h2 {
+    margin-bottom: 25px;
+}
+
+select {
+    width: 60%;
+    margin: 0 auto 60px;
+    display: block;
+    padding: 10px;
+    color: #575757;
+    border: 1px solid var(--color-black);
+}
+
+option {
+    color: var(--color1);
+}
+
+.bgDark {
+    background-color: var(--bgDark);
+}
+
+.bgLight {
+    background-color: var(--bgLight);
+}
+
+.bgGrey {
+    background-color: var(--bgGrey);
+}
+
+.bRad {
+    border-radius: var(--bRad);
+}
+
+.textCenter {
+    text-align: center;
+}
+
+.letterSpacing {
+    letter-spacing: var(--letterSpacing);
+}
+
+.container {
+    width: 95%;
+    margin: 0 auto;
+}
+
+.fullContainer {
+    width: 100%;
+} 
+
+.flexContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center; /* Centrar contenido en dispositivos móviles */
+}
+
+.gridContainer {
+    display: grid;
+}
+
+/* =============== 768 =============== */
+
+@media screen and (min-width: 768px) {
+    body {
+        margin: 100px;
+    }
+
+    .flexContainer {
+        gap: 10px;
+    }
+}
+/* 768 */
+
+/* =============== 992 =============== */
+@media screen and (min-width: 992px) {
+
+    .flexContainer {
+        gap: 15px;
+    }
+}
+
+/* 992 */
+
+/* =============== 1200 =============== */
+@media screen and (min-width: 1200px) {
+    .flexContainer {
+        gap: 20px;
+    }
+
+    figure {
+        text-align: center;
+    }
+
+    figure img {
+        object-fit: cover;
+        height: 300px;
+    }
+
+    .letterSpacing {
+        letter-spacing: 0.4em;
+    }
 }

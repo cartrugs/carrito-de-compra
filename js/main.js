@@ -19,6 +19,15 @@ document.addEventListener('DOMContentLoaded', () => {
    */
   const contenedorProductos = document.querySelector('#contenedorProductos');
 
+   /**
+   * Captura del botón con el que se añadirán los productos.
+   */
+  const btnAnadir = document.querySelector('.btnAnadir') ;
+
+  const fragment = document.createDocumentFragment();
+
+  const carrito = [];
+
   /**
    * La URL base para la API de productos.
    * @type {string}
@@ -43,7 +52,16 @@ document.addEventListener('DOMContentLoaded', () => {
       await pintarCategorias(`/category/${categoriaSeleccionada}`)
 
     }
-  })
+  });
+
+  btnAnadir.addEventListener('click', async (event) => {
+    const button = event.target;
+    const productoId = button.dataset.id;
+
+    if (productoId) {
+      agregarAlCarrito(productoId);
+    }
+  });
 
   // ===== FUNCIONES =====
 
@@ -91,36 +109,68 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Limpiar el contenido contenedor
         contenedorProductos.innerHTML = ''
-        data.products.forEach( (element) => {
+        data.products.forEach((element) => {
           const figure = document.createElement('FIGURE');
-          figure.classList.add('flexContainer')
+          figure.classList.add('flexContainer');
+          
           const imagen = document.createElement('IMG');
           imagen.src = element.images[0];
           imagen.alt = element.title;
           imagen.classList.add('bRad2')
+
           const titulo = document.createElement('H2');
           titulo.classList.add('textCenter')
           titulo.textContent = `${element.title}`
+
           const valoracion = document.createElement('P');
           valoracion.classList.add('textCenter')
           valoracion.textContent = `${element.rating}`;
+
           const precio = document.createElement('H3');
           precio.classList.add('textCenter')
           precio.textContent = `${element.price}`;
+
+          const button = document.createElement('BUTTON');
+          button.dataset.id = element.id;
+          button.type = 'button'
+          button.innerHTML= 'Añadir';
+          button.classList.add('btnAnadir', 'bRad', 'letterSpacing');
 
           figure.append(imagen);
           figure.append(titulo);
           figure.append(valoracion);
           figure.append(precio);
+          figure.append(button);
 
-          contenedorProductos.append(figure);
+          fragment.append(figure)
 
-        })
+        });
+
+        contenedorProductos.append(fragment);
 
         // Crear elementos para cada producto y agregarlos al contenedor
       } else {
         throw 'No se puede mostrar el resultado de la catregoría seleccionada'
       }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const agregarAlCarrito = async (productoId) => {
+    try{
+      const res = await fetch(`${urlBase}/products/add/${productoId}`);
+
+      if (res.ok) {
+        const producto = await res.json();
+
+       carrito.push(producto);
+
+        console.log(`Producto añadido al carrito: ${producto}`);
+      } else {
+        throw 'No se pudo agregar el producto al carrito';
+      }
+
     } catch (error) {
       console.log(error);
     }

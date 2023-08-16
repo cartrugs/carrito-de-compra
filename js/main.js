@@ -36,12 +36,11 @@ document.addEventListener('DOMContentLoaded', () => {
  
     // Se verifica si la categoría seleccionada es diferente de `'seleccionaCategoria'`. Esto se hace para asegurarse de que no se realizan acciones si el usuario selcciona la opción por defecto en el `<select>`
     if (categoriaSeleccionada !== 'seleccionaCategoria') {
-      // const productos = await categoriaSelect(`?categories=${categoriaSeleccionada}`);
       
       /**
        *  Obtener y mostrar productos de la categoría seleccionada si la categoría seleccionada no es la opción por defecto y se invoca la función pasando el valor de `categoriaSeleccionada` como parte de la url para obtener productos de la categoría correspondiente.
        */ 
-      await pintarCategorias(`?categories=${categoriaSeleccionada}`)
+      await pintarCategorias(`/category/${categoriaSeleccionada}`)
 
     }
   })
@@ -83,30 +82,6 @@ document.addEventListener('DOMContentLoaded', () => {
     
   }
 
-  /**
-   * Realiza una solicitud a la API para obtener productos de una categoría.
-   * @param {string} url - La URL de la API para obtener productos.
-   * @returns {Promise} - Una promesa que se resuelve con los datos de los productos.
-   */
-  const categoriaSelect = async (url) => {
-    try {
-      /**
-       * Retorna promesa. Se utiliza `await` para que continúe ejecutándose el programa. Se utiliza `fetch` para obtener recursos de forma asíncrona desde la API
-       */
-      const res = await fetch(`${urlBase}/${url}`);
-
-      if (res.ok) {
-        const data = await res.json();
-        return data;
-      } else {
-        throw 'Ha ocurrido un error';
-      }
-    } catch (error) {
-      console.log(error);
-      // return null;
-    }
-  };
-
   const pintarCategorias = async (url) => {
     try {
       const res =  await fetch(`${urlBase}/${url}`);
@@ -118,10 +93,11 @@ document.addEventListener('DOMContentLoaded', () => {
         contenedorProductos.innerHTML = ''
         data.products.forEach( (element) => {
           const figure = document.createElement('FIGURE');
-          figure.classList.add('producto')
+          figure.classList.add('flexContainer')
           const imagen = document.createElement('IMG');
           imagen.src = element.images[0];
           imagen.alt = element.title;
+          imagen.classList.add('bRad2')
           const titulo = document.createElement('H2');
           titulo.classList.add('textCenter')
           titulo.textContent = `${element.title}`

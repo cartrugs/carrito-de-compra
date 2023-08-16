@@ -7,6 +7,7 @@
     --bRad: 30px; /* border-radius */
     --bRad2: 10px; /* border-radius */
     --letterSpacing: 0.2em;
+    --gap: 20px;
 }
 
 * {
@@ -21,7 +22,10 @@ body {
 
 img {
     width: 100%;
-    border-radius: 3px;
+}
+
+figure {
+    margin-bottom: 80px;
 }
 
 p {
@@ -65,6 +69,10 @@ option {
     border-radius: var(--bRad);
 }
 
+.bRad2 {
+    border-radius: var(--bRad2);
+} 
+
 .textCenter {
     text-align: center;
 }
@@ -101,9 +109,25 @@ option {
     }
 
     .flexContainer {
-        gap: 10px;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        background-color: var(--bgLight);
+        border-radius: var(--bRad);
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .gridContainer {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--gap)
+    }
+    
+    figure {
+        margin-bottom: 0;
     }
 }
+    
 /* 768 */
 
 /* =============== 992 =============== */
@@ -111,6 +135,10 @@ option {
 
     .flexContainer {
         gap: 15px;
+    }
+
+    .gridContainer {
+        grid-template-columns: repeat(3, 1fr);
     }
 }
 
@@ -120,15 +148,6 @@ option {
 @media screen and (min-width: 1200px) {
     .flexContainer {
         gap: 20px;
-    }
-
-    figure {
-        text-align: center;
-    }
-
-    figure img {
-        object-fit: cover;
-        height: 300px;
     }
 
     .letterSpacing {

@@ -24,15 +24,27 @@ document.addEventListener('DOMContentLoaded', () => {
    */
   const btnAnadir = document.querySelector('.btnAnadir') ;
 
+  /**
+   * Captura del botón para mostrar la compra
+   */
+  const btnMostrarCompra = document.querySelector('#btnMostrarCompra');
+
+  /**
+   * fragment no afecta el DOM principal y ayuda a reducir la carga en el rendimiento al realizar muchas manipulaciones en el DOM. Luego, al final del bucle se agrega todo el fragmento en una sola operación.
+   */
   const fragment = document.createDocumentFragment();
 
-  const carrito = [];
+  /**
+   * Array vacio para guardar los productos añadidos al carrito
+   */
+  contenedorProductosComprados = [];
 
   /**
    * La URL base para la API de productos.
    * @type {string}
    */
   const urlBase = 'https://dummyjson.com/products';
+
 
   // ===== EVENTOS =====
 
@@ -54,14 +66,25 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  btnAnadir.addEventListener('click', async (event) => {
-    const button = event.target;
-    const productoId = button.dataset.id;
+  /**
+   * Maneja el evento `click` en el botón de añadir. Cuando el evento `click` se dispara en el `button` del producto, se ejecuta la función de escucha.
+   */
+  document.addEventListener('click', ({target}) => {
 
-    if (productoId) {
+    if (target.classList.contains('btnAnadir')) {
+      const productoId = target.dataset.id;
       agregarAlCarrito(productoId);
+      console.log(productoId)
     }
   });
+  
+  /**
+   * Maneja el evento click del botón  `Mostrar Compra`. Cuando el evento `click` se dispara en el `button` del carrito, se ejecuta la función de escucha.
+   */
+  btnMostrarCompra.addEventListener('click', () => {
+    mostrarCompraEnCarrito();
+  });
+
 
   // ===== FUNCIONES =====
 
@@ -98,7 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log(error)
     }
     
-  }
+  };
 
   const pintarCategorias = async (url) => {
     try {
@@ -128,19 +151,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
           const precio = document.createElement('H3');
           precio.classList.add('textCenter')
-          precio.textContent = `${element.price}`;
+          precio.textContent = `${element.price}€`;
 
-          const button = document.createElement('BUTTON');
-          button.dataset.id = element.id;
-          button.type = 'button'
-          button.innerHTML= 'Añadir';
-          button.classList.add('btnAnadir', 'bRad', 'letterSpacing');
-
+          const anadirAlCarritoButton = document.createElement('BUTTON');
+          anadirAlCarritoButton.dataset.id = element.id;
+          anadirAlCarritoButton.type = 'button'
+          anadirAlCarritoButton.innerHTML= 'Añadir';
+          anadirAlCarritoButton.classList.add('btnAnadir', 'bRad', 'letterSpacing');
+          
           figure.append(imagen);
           figure.append(titulo);
           figure.append(valoracion);
           figure.append(precio);
-          figure.append(button);
+          figure.append(anadirAlCarritoButton);
 
           fragment.append(figure)
 
@@ -159,22 +182,38 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const agregarAlCarrito = async (productoId) => {
     try{
-      const res = await fetch(`${urlBase}/products/add/${productoId}`);
+      const resProducto = await fetch(`${urlBase}/${productoId}`);
+      console.log(resProducto)
+      const producto = await resProducto.json();
+
+      const res = await fetch(`${urlBase}/add`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(producto)
+      });
 
       if (res.ok) {
-        const producto = await res.json();
+        const productoAgregado = await res.json();
 
-       carrito.push(producto);
+        contenedorProductosComprados.push(productoAgregado);
 
-        console.log(`Producto añadido al carrito: ${producto}`);
+        /**
+         * JSON.stringify(productoAgregado, null, 2): Aquí es donde se formatea y se muestra el objeto productoAgregado como una cadena JSON legible. Los argumentos de esta función son:
+         * productoAgregado: Es el objeto que se va a convertir en una cadena JSON.
+         * null: Es una función de reemplazo opcional. Si no se especifica o se establece en null, no hay reemplazo y todos los valores se incluirán en la cadena JSON.
+         * 2: Es el número de espacios de sangría que se utilizan para formatear la cadena JSON. Esto hace que la cadena sea más legible al agregar sangría y espacios en blanco. Un valor de 2 es comúnmente utilizado para una mejor visualización.
+         */
+        console.log('Producto añadido al carrito:', JSON.stringify(productoAgregado, null, 2));
+
       } else {
         throw 'No se pudo agregar el producto al carrito';
       }
 
     } catch (error) {
-      console.log(error);
+      console.log('Error al agregar el producto al carrito:', error);
     }
-  }
+  };
+  
 
   // ===== INVOCACIÓN DE FUNCIONES =====
 

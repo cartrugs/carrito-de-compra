@@ -58,6 +58,11 @@ button {
     border: 1px solid var(--color1);
 }
 
+.btnComprado {
+    display: flex;
+    justify-content: flex-end;
+}
+
 .bgDark {
     background-color: var(--bgDark);
 }

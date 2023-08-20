@@ -4,11 +4,18 @@
     --color-black: #000;
     --color1: #575757;
     --bgLight: #fdfdfd;
+    --bgDark: #4e4e4e;
     --bRad: 30px; /* border-radius */
     --bRad2: 10px; /* border-radius */
     --letterSpacing: 0.2em;
     --gap: 20px;
 }
+
+/* Estilos para las estrellas de rating */
+.ratingStars {
+    font-size: 24px; /* Tamaño de fuente de las estrellas */
+    color: #f7c42c; /* Color de las estrellas */
+  }
 
 * {
     margin: 0;
@@ -61,6 +68,30 @@ button {
 .btnComprado {
     display: flex;
     justify-content: flex-end;
+    margin-top: 25px;
+}
+
+.btnMostrarCompra, .btnEliminarCompra
+{
+    margin-right: 20px;
+}
+
+.incDec { /* incremento decremento*/
+    color: var(--color-white);
+    margin: 0 4px;
+}
+
+.contador {
+    display: flex;
+    justify-content: center;
+}
+
+.cntd /* contador span*/ {
+    font-size: 1.2rem;
+}
+
+.conProComp { /* contenedor comprados */
+    margin-top: 15px; 
 }
 
 .bgDark {
@@ -91,6 +122,10 @@ button {
     letter-spacing: var(--letterSpacing);
 }
 
+.gap {
+    gap: var(--gap);
+}
+
 .container {
     width: 95%;
     margin: 0 auto;
@@ -102,6 +137,7 @@ button {
 
 .flexContainer {
     display: flex;
+    flex-direction: column;
     flex-wrap: wrap;
     gap: 20px;
     justify-content: center; /* Centrar contenido en dispositivos móviles */
@@ -110,6 +146,10 @@ button {
 .gridContainer {
     display: grid;
 }
+
+.hidden {
+    display: none;
+  }
 
 /* =============== 768 =============== */
 

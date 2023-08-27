@@ -10,9 +10,43 @@
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@200&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/main.css">
 </head>
+
 <body>
 
+    <main class="container">
+        <header>
+            <nav></nav>
+            <!-- <p class="textCenter">Productos en el carrito</p> -->
+            <div id="contenedorProductosComprados" class="gridContainer conProComp">
+                <!-- Aquí se mostrarán los productos comprados -->
+            </div>
+            <div class="btnComprado">
+                <button id="btnMostrarCompra" class="btnMostrarCompra bRad letterSpacing">Mostrar compra</button>
+                <button id="btnEliminarCompra" class="btnEliminarCompra bRad letterSpacing hidden">Eliminar compra</button>
+                <button id="btnFinalizarCompra" class="bgPrimary bRad letterSpacing">Finalizar compra</button>
 
+            </div>
+            
+            <h1 class="textCenter letterSpacing">Nuestros increibles productos al mejor precio en el mejor catálogo online</h1>
+        </header>
+
+        <section>
+            <div>
+                <form>
+                    <select name="opcionesCategoria" id="opcionesCategoria" class="textCenter bgLight bRad letterSpacing">
+                        <option value="seleccionaCategoria">Selecciona una categoría</option>
+                    </select>
+                </form> 
+            </div>
+        </section>
+
+        <section>
+            <div id="contenedorProductos" class="gridContainer">
+                <!-- Aquí se mostrarán los productos -->
+            </div>
+        </section>
+        
+    </main>
     
 
     <script src="js/main.js"></script>
